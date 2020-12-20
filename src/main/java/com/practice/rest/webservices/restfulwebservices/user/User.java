@@ -1,16 +1,21 @@
 package com.practice.rest.webservices.restfulwebservices.user;
 
-import java.util.Date;
+import org.springframework.hateoas.RepresentationModel;
 
+import javax.validation.constraints.Past;
+import javax.validation.constraints.Size;
+import java.util.Date;
 /**
  * @author Anand SN
  */
-public class User {
+public class User extends RepresentationModel<User> {
 
     private Integer id;
 
+    @Size(min=2,message = "Name should have at least 2 character")
     private String name;
 
+    @Past
     private Date birthDate;
 
     //Important : Can not construct instance of com.practice.rest.webservices.restfulwebservices.user No creators like default constructor error '

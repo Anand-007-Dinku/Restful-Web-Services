@@ -5,39 +5,46 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
+
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 /**
  * @author Anand SN
  */
 @RestController
-public class UserResource {
+public class UserResource{
 
     @Autowired
     private UserDaoService service;
-
-    //retrieveAllUsers
-
-    //retrieveUser(int id)
 
     @GetMapping(value = "/users")
     public List<User> retrieveAllUsers(){
         return service.findAll();
     }
 
+
+    //Important: HATEOAS Implementation
     @GetMapping(path = "/users/{id}")
     public User retrieveUser(@PathVariable int id){
         User user = service.findOne(id);
         if (user == null){
             throw new UserNotFoundException("User Not Found for id "+id);
         }
+
+        user.add(linkTo(methodOn(this.getClass())
+                .retrieveAllUsers())
+                .withRel("all-users"));
+
         return user;
     }
 
     //@RequestMapping(method = RequestMethod.POST, path = "users/{user}")
     @PostMapping("/users")
-    public ResponseEntity createUser(@RequestBody User user){
+    public ResponseEntity createUser(@Valid @RequestBody User user){
         User savedUser = service.save(user);
 
         //CREATED
@@ -59,5 +66,4 @@ public class UserResource {
             throw new UserNotFoundException("User Not Found for id "+id);
         }
     }
-
 }
