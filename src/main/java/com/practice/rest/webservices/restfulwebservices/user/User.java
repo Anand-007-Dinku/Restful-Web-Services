@@ -1,5 +1,7 @@
 package com.practice.rest.webservices.restfulwebservices.user;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import org.springframework.hateoas.RepresentationModel;
 
 import javax.validation.constraints.Past;
@@ -8,13 +10,16 @@ import java.util.Date;
 /**
  * @author Anand SN
  */
+@ApiModel(description = "All details about the User")
 public class User extends RepresentationModel<User> {
 
     private Integer id;
 
+    @ApiModelProperty(notes = "Name should have at least 2 character")
     @Size(min=2,message = "Name should have at least 2 character")
     private String name;
 
+    @ApiModelProperty(notes = "Birth date should be in the past")
     @Past
     private Date birthDate;
 

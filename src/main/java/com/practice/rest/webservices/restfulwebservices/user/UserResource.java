@@ -1,6 +1,7 @@
 package com.practice.rest.webservices.restfulwebservices.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -26,20 +27,21 @@ public class UserResource{
         return service.findAll();
     }
 
-
-    //Important: HATEOAS Implementation
+    //Important: HATEOAS
     @GetMapping(path = "/users/{id}")
-    public User retrieveUser(@PathVariable int id){
+    public EntityModel<User> retrieveUser(@PathVariable int id){
         User user = service.findOne(id);
         if (user == null){
             throw new UserNotFoundException("User Not Found for id "+id);
         }
 
-        user.add(linkTo(methodOn(this.getClass())
+        //Important: HATEOAS(Hypermedia as the engine of Application state) Implementation
+        EntityModel<User> resource = EntityModel.of(user);
+        resource.add(linkTo(methodOn(this.getClass())
                 .retrieveAllUsers())
                 .withRel("all-users"));
 
-        return user;
+        return resource;
     }
 
     //@RequestMapping(method = RequestMethod.POST, path = "users/{user}")

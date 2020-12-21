@@ -2,7 +2,7 @@
 
 Social Media Application
 
-User -> Posts   ---> 1 to many relationship (A User over a period of his life will make a lot of posts)
+####User -> Posts   ---> 1 to many relationship (A User over a period of his life will make a lot of posts)
 
 - Retrive all Users         - GET /users
 - Create a User             - POST /users
